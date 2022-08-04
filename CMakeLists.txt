@@ -24,6 +24,7 @@ include(FeatureSummary)
 include(GNUInstallDirs)
 
 #Find dependecies
+find_package(Qt5 COMPONENTS Core CONFIG REQUIRED)
 find_package(simpleautorunlib REQUIRED)
 
 add_subdirectory(src)
