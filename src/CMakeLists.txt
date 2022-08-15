@@ -5,7 +5,6 @@ set(SOURCES
     main.cpp
 )
 
-
 add_executable(${PROJECT_NAME}
     ${SOURCES}
 )
@@ -18,11 +17,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${ZFPGATEST_OPERATOR_
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
     Qt5::Core
-    simplecmdiobase
+    simpleautorunlib
 )
 
 #install executable to bin
 install(TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     )
-
