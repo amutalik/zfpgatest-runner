@@ -3,10 +3,16 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 #sum up project Files
 set(SOURCES
     main.cpp
+    testmessagehandler.cpp
+)
+
+set(HEADERS
+    testmessagehandler.h
 )
 
 add_executable(${PROJECT_NAME}
     ${SOURCES}
+    ${HEADERS}
 )
 
 #set target Version
