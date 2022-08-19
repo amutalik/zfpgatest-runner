@@ -17,7 +17,7 @@ add_executable(${PROJECT_NAME}
 
 #set target Version
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${ZFPGATEST_OPERATOR_VERSION_MAJOR})
+set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${ZFPGATEST_RUNNER_VERSION_MAJOR})
 
 #link dependencies
 target_link_libraries(${PROJECT_NAME}
