@@ -130,7 +130,7 @@ QString TestMessageHandler::CheckResponseMessageHandler(MessageType msgType, con
     if (msgType == MessageType::RESPONSE_ERROR) {
         if (msg.contains("CHECK FAILED", Qt::CaseInsensitive)) {
             //suppress the display of expected and actual values
-            int posOK = msg.indexOf("FAILED", Qt::CaseInsensitive);
+            int posOK = msg.indexOf("expected", Qt::CaseInsensitive);
             msgInfo = msg.left(posOK);
         }
         m_ResponseErrorCount++;
