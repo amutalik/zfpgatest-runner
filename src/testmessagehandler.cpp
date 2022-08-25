@@ -14,7 +14,9 @@ void TestMessageHandler::MessageHandler(QtMsgType type, const QMessageLogContext
 {
     QByteArray localMsg = DecodeMessageInfo(msg).toLocal8Bit();
 
-    fprintf(stderr, "%s\n", localMsg.constData());
+    if(!localMsg.isEmpty()) {
+        fprintf(stderr, "%s\n", localMsg.constData());
+    }
 }
 
 void TestMessageHandler::DisplayTestSummary()
@@ -45,7 +47,10 @@ QString TestMessageHandler::DecodeMessageInfo(const QString &msg)
     MessageType msgType = DecodeMessageType(msg);
     QString msgInfo = msg;
 
-    if (msg.contains("READ", Qt::CaseInsensitive)) {
+    if (msg.contains("Starting", Qt::CaseInsensitive) || msg.contains("Tag", Qt::CaseInsensitive)) {
+        msgInfo = QString();
+    }
+    else if (msg.contains("READ", Qt::CaseInsensitive)) {
         msgInfo = ReadMessageHandler(msgType, msg);
     }
     else if (msg.contains("WRITE", Qt::CaseInsensitive)) {
