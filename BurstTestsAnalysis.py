@@ -19,7 +19,7 @@ TestSummaryHeader = ['FILE', 'EXPECTED', 'RECEIVED', 'R/W', 'BIT NO.', 'ERROR TY
 
 #filesList = open(args.inputFiles, "r")
 
-filesList = open("tests/inputFiles.txt", "r")
+filesList = open("tests/inputFiles_1.txt", "r")
 files = filesList.read().splitlines()
 
 testSummaryRows = []
@@ -39,34 +39,48 @@ for fileName in files:
                 r_w_Error = "W" if "ERROR" in line else "R"
                 errorFound = False
 
-                for x, wrongbit in enumerate(wrongBits):
-                    row = [testFile.name.split("/")[1], expectedHexFormatted, receivedHexFormatted, r_w_Error, wrongbit, wrongBitsInfo[x]]
-                    testSummaryRows.append(row)
-                    del row
+                for y, erroInfo in enumerate(totalWrongBits):
+                
+                    for x, wrongbit in enumerate(erroInfo):
+                        row = [testFile.name.split("/")[1], totalExpectedHexFormatted[y], totalReceivedHexFormatted[y], r_w_Error, wrongbit, totalWrongBitsInfo[y][x]]
+                        testSummaryRows.append(row)
+                        del row
 
             else:
                 if "ERROR" in line:
                     errorFound = True
 
-                    expectedHexOrig = lines[index+1].split("'")[3]
-                    receivedHexOrig = lines[index+1].split("'")[5]
-                    expectedHexFormatted = expectedHexOrig[2:4] + expectedHexOrig[0:2]
-                    receivedHexFormatted = receivedHexOrig[2:4] + receivedHexOrig[0:2]
-                    expectedInt = int(expectedHexFormatted, 16)
-                    receivedInt = int(receivedHexFormatted, 16)
-                    
-                    diff = expectedInt ^ receivedInt
-                    diffBitList = list(int2ba(diff))[::-1]
-                    
-                    expectedBitList = list(int2ba(expectedInt, 16))[::-1]
+                    totalWrongBits = []
+                    totalWrongBitsInfo = []
+                    totalExpectedHexFormatted = []
+                    totalReceivedHexFormatted = []
+                    nextline = index+1
+                    while "Expected" in lines[nextline]:
+                        expectedHexOrig = lines[nextline].split("'")[3]
+                        receivedHexOrig = lines[nextline].split("'")[5]
+                        expectedHexFormatted = expectedHexOrig[2:4] + expectedHexOrig[0:2]
+                        receivedHexFormatted = receivedHexOrig[2:4] + receivedHexOrig[0:2]
+                        expectedInt = int(expectedHexFormatted, 16)
+                        receivedInt = int(receivedHexFormatted, 16)
+                        
+                        diff = expectedInt ^ receivedInt
+                        diffBitList = list(int2ba(diff))[::-1]
+                        
+                        expectedBitList = list(int2ba(expectedInt, 16))[::-1]
 
-                    wrongBits = []
-                    wrongBitsInfo = []
-                    for idx,bit in enumerate(diffBitList):
-                        if bit:
-                            wrongBits.append(idx)
-                            wrongBitsInfo.append("1 to 0") if expectedBitList[idx] else wrongBitsInfo.append("0 to 1")
-                
+                        wrongBits = []
+                        wrongBitsInfo = []
+                        for idx,bit in enumerate(diffBitList):
+                            if bit:
+                                wrongBits.append(idx)
+                                wrongBitsInfo.append("1 to 0") if expectedBitList[idx] else wrongBitsInfo.append("0 to 1")
+
+                        totalWrongBits.append(wrongBits)
+                        totalWrongBitsInfo.append(wrongBitsInfo)
+                        totalExpectedHexFormatted.append(expectedHexFormatted)
+                        totalReceivedHexFormatted.append(receivedHexFormatted)
+
+                        nextline += 1
 
 filesList.close()
 
