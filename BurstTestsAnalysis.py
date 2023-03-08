@@ -19,7 +19,7 @@ TestSummaryHeader = ['FILE', 'EXPECTED', 'RECEIVED', 'R/W', 'BIT NO.', 'ERROR TY
 
 #filesList = open(args.inputFiles, "r")
 
-filesList = open("tests/inputFiles_1.txt", "r")
+filesList = open("tests/inputFiles.txt", "r")
 files = filesList.read().splitlines()
 
 testSummaryRows = []
@@ -31,30 +31,30 @@ for fileName in files:
 
     errorFound = False
 
-    for index, line in enumerate(lines):
+    for lineNumber, thisLine in enumerate(lines):
 
-        if "CheckLastResponseWithFile" in line:
+        if "CheckLastResponseWithFile" in thisLine:
 
             if errorFound:
-                r_w_Error = "W" if "ERROR" in line else "R"
+                rwErrorType = "W" if "ERROR" in thisLine else "R"
                 errorFound = False
 
                 for y, erroInfo in enumerate(totalWrongBits):
                 
                     for x, wrongbit in enumerate(erroInfo):
-                        row = [testFile.name.split("/")[1], totalExpectedHexFormatted[y], totalReceivedHexFormatted[y], r_w_Error, wrongbit, totalWrongBitsInfo[y][x]]
+                        row = [testFile.name.split("/")[1], totalExpectedHexFormatted[y], totalReceivedHexFormatted[y], rwErrorType, wrongbit, totalWrongBitsInfo[y][x]]
                         testSummaryRows.append(row)
                         del row
 
             else:
-                if "ERROR" in line:
+                if "ERROR" in thisLine:
                     errorFound = True
 
                     totalWrongBits = []
                     totalWrongBitsInfo = []
                     totalExpectedHexFormatted = []
                     totalReceivedHexFormatted = []
-                    nextline = index+1
+                    nextline = lineNumber+1
                     while "Expected" in lines[nextline]:
                         expectedHexOrig = lines[nextline].split("'")[3]
                         receivedHexOrig = lines[nextline].split("'")[5]
